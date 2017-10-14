@@ -94,7 +94,7 @@ class PageData extends \PhpTags\GenericObject {
 		}
 
 		\PhpTagsStorage\Schema::loadSchema( $templates );
-		$db = wfGetDB( DB_SLAVE, 'PhpTags' );
+		$db = wfGetDB( DB_REPLICA, 'PhpTags' );
 		foreach ( $templates as $t ) {
 			$fields = \PhpTagsStorage\Schema::getTemplateFields( $t );
 			$res = $db->select( \PhpTagsStorage\Schema::TABLE_PREFIX . $t, '*', array('page_id'=>$pageID) );

@@ -82,7 +82,7 @@ class Schema {
 			return self::$pageTemplates[$pageID];
 		}
 
-		$db = wfGetDB( DB_SLAVE );
+		$db = wfGetDB( DB_REPLICA );
 		$rowTemplates = $db->selectRow( self::TABLE_PAGE_TEMPLATES , 'templates', array('page_id'=>$pageID) );
 		if ( $rowTemplates !== false ) {
 			$templates = \FormatJson::decode( $rowTemplates->templates, true );
@@ -106,7 +106,7 @@ class Schema {
 			return true;
 		}
 
-		$db = wfGetDB( DB_SLAVE );
+		$db = wfGetDB( DB_REPLICA );
 		$schemaRows = $db->select( self::TABLE_SCHEMA, array('template_id','table_schema'), array('template_id'=>$tmp) );
 		while ( $row = $schemaRows->fetchObject() ) {
 			self::$loadedRows[$row->template_id] = $row->table_schema;

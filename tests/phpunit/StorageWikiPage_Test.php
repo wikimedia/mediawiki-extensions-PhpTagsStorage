@@ -81,7 +81,7 @@ $s->setValues( [ "tag"=>$argv[1] ] );
 		$templateStorageTagId = $this->createPage( $titleStorageTag, $text, CONTENT_MODEL_WIKITEXT )->getId();
 
 		# ------------------------
-		$dbr = wfGetDB( DB_SLAVE );
+		$dbr = wfGetDB( DB_REPLICA );
 		$res = $dbr->select( PhpTagsStorage\Schema::TABLE_SCHEMA, '*', array('template_id' => $templateStorageTagId) );
 		$n = $res->numRows();
 		$res->free();
