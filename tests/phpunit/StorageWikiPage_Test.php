@@ -154,6 +154,9 @@ if ( $rows ) {
 
 		$options = new ParserOptions();
 		$options->enableLimitReport( false );
+		if ( is_callable( [ $options, 'setWrapOutputClass' ] ) ) { // since 1.30
+			$options->setWrapOutputClass( false );
+		}
 
 		$output = $page->getContent()-> getParserOutput( $page->getTitle(), null, $options );
 		$this->assertEquals($output->getText(), "<p>TAGS: one, two, three.\n</p>", "Page 'Test template DumpTags'" );
