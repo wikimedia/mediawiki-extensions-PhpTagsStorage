@@ -60,7 +60,7 @@ class PhpTagsStorageHooks {
 	 * @param type $content
 	 * @param array $updates
 	 */
-	public static function onWikiPageDeletionUpdates( $page, $content, &$updates ) {
+	public static function onWikiPageDeletionUpdates( WikiPage $page, $content, &$updates ) {
 		wfDebugLog( 'PhpTags Storage', __METHOD__ );
 		$titleID = $page->getTitle()->getArticleID();
 //		echo __METHOD__ . '( ' . $titleID . " )\n";
