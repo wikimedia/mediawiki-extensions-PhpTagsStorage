@@ -1,7 +1,7 @@
 <?php
 namespace PhpTags;
 
-class PhpTagsStorage_Test extends \PHPUnit_Framework_TestCase {
+class PhpTagsStorage_Test extends \PHPUnit\Framework\TestCase {
 
 	public function testRun_PHPTAGS_STORAGE_VERSION_constant() {
 		$this->assertEquals(
