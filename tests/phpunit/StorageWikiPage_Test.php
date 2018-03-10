@@ -154,12 +154,9 @@ if ( $rows ) {
 
 		$options = new ParserOptions();
 		$options->enableLimitReport( false );
-		if ( is_callable( [ $options, 'setWrapOutputClass' ] ) ) { // since 1.30
-			$options->setWrapOutputClass( false );
-		}
 
 		$output = $page->getContent()-> getParserOutput( $page->getTitle(), null, $options );
-		$this->assertEquals($output->getText(), "<p>TAGS: one, two, three.\n</p>", "Page 'Test template DumpTags'" );
+		$this->assertEquals($output->getText( [ 'unwrap' => true ] ), "<p>TAGS: one, two, three.\n</p>", "Page 'Test template DumpTags'" );
 
 		####### Move Template:StorageTag to Template:NewStorageTag and create redirect #######
 //		var_dump( "-= MOVE TEMPLATE =-" );
@@ -184,7 +181,7 @@ if ( $rows ) {
 
 		$page = $this->createPage( "Test template DumpTags after move template", $text, CONTENT_MODEL_WIKITEXT );
 		$output = $page->getContent()-> getParserOutput( $page->getTitle(), null, $options );
-		$this->assertEquals($output->getText(), "<p>TAGS: one, two, three.\n</p>", "Page 'Test template DumpTags after move template'" );
+		$this->assertEquals($output->getText( [ 'unwrap' => true ] ), "<p>TAGS: one, two, three.\n</p>", "Page 'Test template DumpTags after move template'" );
 
 		####### Create Page3 (transclude redirect StorageTag) #######
 		$text = '{{StorageTag|I use #redirect to template NewStorageTag}}';
@@ -206,7 +203,7 @@ if ( $rows ) {
 		$page = $this->createPage( "Test DumpTags for redirect page", $text, CONTENT_MODEL_WIKITEXT );
 
 		$output = $page->getContent()-> getParserOutput( $page->getTitle(), null, $options );
-		$this->assertEquals($output->getText(), "<p>TAGS: I use #redirect to template NewStorageTag.\n</p>" );
+		$this->assertEquals($output->getText( [ 'unwrap' => true ] ), "<p>TAGS: I use #redirect to template NewStorageTag.\n</p>" );
 
 		####### Delete Page1 #######
 //		echo "Test delete Page1 $page_1_ID\n";
