@@ -25,7 +25,7 @@ $wgExtensionCredits['phptags'][] = array(
 	'url' => 'https://www.mediawiki.org/wiki/Extension:PhpTags_Storage',
 	'author' => '[https://www.mediawiki.org/wiki/User:Pastakhov Pavel Astakhov]',
 	'descriptionmsg' => 'phptagsstorage-desc',
-	'license-name' => 'GPL-2.0+',
+	'license-name' => 'GPL-2.0-or-later',
 );
 
 // Allow translations for this extension
