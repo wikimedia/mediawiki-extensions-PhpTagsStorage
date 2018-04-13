@@ -40,9 +40,6 @@ $wgHooks['WikiPageDeletionUpdates'][] = 'PhpTagsStorageHooks::onWikiPageDeletion
 $wgHooks['UnitTestsList'][] = 'PhpTagsStorageHooks::onUnitTestsList';
 $wgHooks['ParserTestTables'][] = 'PhpTagsStorageHooks::onParserTestTables';
 
-// Add parser tests
-# $wgParserTestFiles[] = __DIR__ . '/tests/parser/PhpTagsStorageTests.txt';
-
 // Preparing classes for autoloading
 $wgAutoloadClasses['PhpTagsStorageHooks'] = __DIR__ . '/PhpTagsStorage.hooks.php';
 $wgAutoloadClasses['PhpTagsObjects\\Storage'] = __DIR__ . '/includes/Storage.php';
