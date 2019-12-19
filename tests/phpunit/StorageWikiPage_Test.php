@@ -2,7 +2,7 @@
 
 class StorageWikiPageTest extends MediaWikiLangTestCase {
 
-	protected function setUp() {
+	protected function setUp() : void {
 		parent::setUp();
 		$this->pages_to_delete = array();
 
@@ -11,7 +11,7 @@ class StorageWikiPageTest extends MediaWikiLangTestCase {
 
 
 
-	protected function tearDown() {
+	protected function tearDown() : void {
 		foreach ( $this->pages_to_delete as $p ) {
 			/* @var $p WikiPage */
 
