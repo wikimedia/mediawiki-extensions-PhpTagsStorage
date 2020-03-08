@@ -160,7 +160,7 @@ if ( $rows ) {
 
 		$page = $this->createPage( "Test template DumpTags", $text, CONTENT_MODEL_WIKITEXT );
 
-		$options = new ParserOptions();
+		$options = ParserOptions::newFromAnon();
 		$options->enableLimitReport( false );
 
 		$output = $page->getContent()-> getParserOutput( $page->getTitle(), null, $options );
