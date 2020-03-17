@@ -51,8 +51,21 @@ class PageData extends \PhpTags\GenericObject {
 			}
 			$title = array_pop( $redirects );
 		}
-		if ( $title && $title->exists() && $title->userCan('read') ) {
-			return $title->getArticleID();
+		if ( $title && $title->exists() ) {
+			$user = \RequestContext::getMain()->getUser();
+			if ( class_exists( 'MediaWiki\Permissions\PermissionManager' ) ) {
+				// MW 1.33+
+				if ( \MediaWiki\MediaWikiServices::getInstance()
+					->getPermissionManager()
+					->userCan( 'read', $user, $title )
+				) {
+					return $title->getArticleID();
+				}
+			} else {
+				if ( $title->userCan( 'read' ) ) {
+					return $title->getArticleID();
+				}
+			}
 		}
 		return false;
 	}
