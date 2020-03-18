@@ -214,7 +214,14 @@ if ( $rows ) {
 
 		####### Undelete Page1 #######
 		$archive = new PageArchive( $page_1->getTitle() );
-		$archive->undelete( array(), 'restore Page1 after test delete' );
+
+		$comment = 'restore Page1 after test delete';
+		if ( method_exists( $archive, 'undeleteAsUser' ) ) {
+			$archive->undeleteAsUser( array(), $this->getTestSysop()->getUser(), $comment );
+		} else {
+			$archive->undelete( array(), $comment );
+		}
+
 		$page_1 = WikiPage::factory( $page_1->getTitle() );
 		$page_1_ID = $page_1->getId();
 
