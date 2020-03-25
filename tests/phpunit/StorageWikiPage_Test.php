@@ -12,12 +12,18 @@ class StorageWikiPageTest extends MediaWikiLangTestCase {
 
 
 	protected function tearDown() : void {
+		$user = $this->getTestSysop()->getUser();
+		$reason = 'testing done.';
 		foreach ( $this->pages_to_delete as $p ) {
 			/* @var $p WikiPage */
 
 			try {
 				if ( $p->exists() ) {
-					$p->doDeleteArticle( "testing done." );
+					if ( version_compare( MW_VERSION, '1.35', '<' ) ) {
+						$p->doDeleteArticle( $reason );
+					} else {
+						$p->doDeleteArticleReal( $reason, $user );
+					}
 				}
 			} catch ( MWException $ex ) {
 				// fail silently
@@ -206,7 +212,13 @@ if ( $rows ) {
 
 		####### Delete Page1 #######
 //		echo "Test delete Page1 $page_1_ID\n";
-		$page_1->doDeleteArticle( 'test delete page' );
+		$reason = 'test delete page';
+		if ( version_compare( MW_VERSION, '1.35', '<' ) ) {
+			$page_1->doDeleteArticle( $reason );
+		} else {
+			$page_1->doDeleteArticleReal( $reason, $this->getTestSysop()->getUser() );
+		}
+
 		$res = $dbr->select( $template_table_name, '*', array('page_id'=>$page_1_ID) );
 		$n = $res->numRows();
 		$this->assertEquals( 0, $n, 'template TABLE should not contain a record for Page1 after the page deletion' );
@@ -238,7 +250,13 @@ if ( $rows ) {
 
 		####### Delete Template:NewStorageTag #######
 //		var_dump( "\$titleNewStorageTag " . $titleNewStorageTag->getArticleID() );
-		WikiPage::factory( $titleNewStorageTag )->doDeleteArticle( 'test delete template' );
+		$wikipage = WikiPage::factory( $titleNewStorageTag );
+		$reason = 'test delete template';
+		if ( version_compare( MW_VERSION, '1.35', '<' ) ) {
+			$wikipage->doDeleteArticle( $reason );
+		} else {
+			$wikipage->doDeleteArticleReal( $reason, $this->getTestSysop()->getUser() );
+		}
 //		var_dump( 'test delete template' );
 
 		# ------------------------
