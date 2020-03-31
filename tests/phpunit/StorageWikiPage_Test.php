@@ -1,12 +1,14 @@
 <?php
 
+use MediaWiki\MediaWikiServices;
+
 class StorageWikiPageTest extends MediaWikiLangTestCase {
 
 	protected function setUp() : void {
 		parent::setUp();
 		$this->pages_to_delete = array();
 
-		LinkCache::singleton()->clear(); # avoid cached redirect status, etc
+		MediaWikiServices::getInstance()->getLinkCache()->clear(); # avoid cached redirect status, etc
 	}
 
 
