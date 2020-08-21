@@ -66,7 +66,7 @@ class SchemaUpdate extends \DataUpdate {
 		# update table Schema::TABLE_SCHEMA
 		$schema = \FormatJson::encode( $fields );
 		wfDebugLog( 'PhpTags Storage', __METHOD__ . " REPLACE TABLE_SCHEMA $templateID");
-		$db->replace( Schema::TABLE_SCHEMA, array('template_id'=>$templateID), array('template_id'=>$templateID, 'table_schema'=>$schema) );
+		$db->replace( Schema::TABLE_SCHEMA, array(array('template_id')), array('template_id'=>$templateID, 'table_schema'=>$schema) );
 		$this->schemaTemplates[$templateID] = null;
 		$this->schemaLoadedRows[$templateID] = $schema;
 	}
