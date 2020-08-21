@@ -28,7 +28,7 @@ class PageTemplatesUpdate extends \DataUpdate {
 			wfDebugLog( 'PhpTags Storage', __METHOD__ . " REPLACE pageTemplates WHERE pageID is " . $this->pageID );
 			$db->replace(
 					Schema::TABLE_PAGE_TEMPLATES,
-					array('page_id' => $this->pageID),
+					array(array('page_id')),
 					array('page_id' => $this->pageID, 'templates' => \FormatJson::encode( $templates ))
 				);
 			$this->schemaPageTemplates[$this->pageID] = $templates;
