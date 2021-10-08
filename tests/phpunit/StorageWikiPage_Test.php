@@ -2,6 +2,9 @@
 
 use MediaWiki\MediaWikiServices;
 
+/**
+ * @group Database
+ */
 class StorageWikiPageTest extends MediaWikiLangTestCase {
 
 	protected function setUp() : void {
@@ -68,8 +71,9 @@ class StorageWikiPageTest extends MediaWikiLangTestCase {
 		} else {
 			$content = ContentHandler::makeContent( $text, $page->getTitle() );
 		}
-		$page->doEditContent( ContentHandler::makeContent( '', $page->getTitle() ), "create empty page" );
-		$page->doEditContent( $content, "testing" );
+		$user = $this->getTestSysop()->getUser();
+		$page->doUserEditContent( ContentHandler::makeContent( '', $page->getTitle() ), $user, "create empty page" );
+		$page->doUserEditContent( $content, $user, "testing" );
 		return $page;
 	}
 
@@ -89,7 +93,7 @@ $s->setValues( [ "tag"=>$argv[1] ] );
 		$templateStorageTagId = $this->createPage( $titleStorageTag, $text, CONTENT_MODEL_WIKITEXT )->getId();
 
 		# ------------------------
-		$dbr = wfGetDB( DB_REPLICA );
+		$dbr = $this->db;
 		$res = $dbr->select( PhpTagsStorage\Schema::TABLE_SCHEMA, '*', array('template_id' => $templateStorageTagId) );
 		$n = $res->numRows();
 		$res->free();
