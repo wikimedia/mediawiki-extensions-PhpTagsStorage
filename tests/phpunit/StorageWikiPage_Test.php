@@ -173,7 +173,7 @@ if ( $rows ) {
 		####### Move Template:StorageTag to Template:NewStorageTag and create redirect #######
 //		var_dump( "-= MOVE TEMPLATE =-" );
 		$titleNewStorageTag = Title::newFromText( "NewStorageTag", NS_TEMPLATE );
-		$mp = new MovePage( $titleStorageTag, $titleNewStorageTag );
+		$mp = $this->getServiceContainer()->getMovePageFactory()->newMovePage( $titleStorageTag, $titleNewStorageTag );
 		$status = $mp->move( $this->getTestSysop()->getUser(), 'Test move Storage', true );
 		$this->assertTrue( $status->isOK() );
 		$this->assertEquals( $titleNewStorageTag->getArticleID(), $templateStorageTagId, 'ID should not change when moving the template' );
