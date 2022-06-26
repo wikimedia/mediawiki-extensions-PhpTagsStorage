@@ -1,6 +1,8 @@
 <?php
 namespace PhpTagsObjects;
 
+use MediaWiki\MediaWikiServices;
+
 /**
  * Description of PageData
  *
@@ -45,7 +47,12 @@ class PageData extends \PhpTags\GenericObject {
 			return false;
 		}
 		if ( $title->isRedirect() ) {
-			$redirects = \WikiPage::factory( $title )->getContent()->getRedirectChain();
+			if ( method_exists( MediaWikiServices::class, 'getWikiPageFactory' ) ) {
+				// MW 1.36+
+				$redirects = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $title )->getContent()->getRedirectChain();
+			} else {
+				$redirects = \WikiPage::factory( $title )->getContent()->getRedirectChain();
+			}
 			if ( !$redirects ) {
 				return false;
 			}

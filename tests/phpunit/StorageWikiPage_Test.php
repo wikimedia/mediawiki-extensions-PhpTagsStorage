@@ -47,7 +47,12 @@ class StorageWikiPageTest extends MediaWikiLangTestCase {
 			$title = Title::newFromText( $title );
 		}
 
-		$page = WikiPage::factory( $title );
+		if ( method_exists( MediaWikiServices::class, 'getWikiPageFactory' ) ) {
+			// MW 1.36+
+			$page = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $title );
+		} else {
+			$page = WikiPage::factory( $title );
+		}
 
 		$this->pages_to_delete[] = $page;
 
@@ -240,7 +245,12 @@ if ( $rows ) {
 			$archive->undelete( array(), $comment );
 		}
 
-		$page_1 = WikiPage::factory( $page_1->getTitle() );
+		if ( method_exists( MediaWikiServices::class, 'getWikiPageFactory' ) ) {
+			// MW 1.36+
+			$page_1 = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $page_1->getTitle() );
+		} else {
+			$page_1 = WikiPage::factory( $page_1->getTitle() );
+		}
 		$page_1_ID = $page_1->getId();
 
 		# ------------------------
@@ -256,7 +266,12 @@ if ( $rows ) {
 
 		####### Delete Template:NewStorageTag #######
 //		var_dump( "\$titleNewStorageTag " . $titleNewStorageTag->getArticleID() );
-		$wikipage = WikiPage::factory( $titleNewStorageTag );
+		if ( method_exists( MediaWikiServices::class, 'getWikiPageFactory' ) ) {
+			// MW 1.36+
+			$wikipage = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $titleNewStorageTag );
+		} else {
+			$wikipage = WikiPage::factory( $titleNewStorageTag );
+		}
 		$reason = 'test delete template';
 		if ( version_compare( MW_VERSION, '1.35', '<' ) ) {
 			$wikipage->doDeleteArticle( $reason );
