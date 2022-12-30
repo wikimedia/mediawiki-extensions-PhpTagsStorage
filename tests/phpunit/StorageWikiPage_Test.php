@@ -172,7 +172,12 @@ if ( $rows ) {
 		$options = ParserOptions::newFromAnon();
 		$options->enableLimitReport( false );
 
-		$output = $page->getContent()-> getParserOutput( $page->getTitle(), null, $options );
+		if ( method_exists( MediaWikiServices::class, 'getContentRenderer' ) ) {
+			// MW 1.38+
+			$output = MediaWikiServices::getInstance()->getContentRenderer()->getParserOutput( $page->getContent(), $page->getTitle(), null, $options );
+		} else {
+			$output = $page->getContent()->getParserOutput( $page->getTitle(), null, $options );
+		}
 		$this->assertEquals($output->getText( [ 'unwrap' => true ] ), "<p>TAGS: one, two, three.\n</p>", "Page 'Test template DumpTags'" );
 
 		####### Move Template:StorageTag to Template:NewStorageTag and create redirect #######
@@ -196,7 +201,12 @@ if ( $rows ) {
 		$text = '{{DumpTags|Page2}}';
 
 		$page = $this->createPage( "Test template DumpTags after move template", $text, CONTENT_MODEL_WIKITEXT );
-		$output = $page->getContent()-> getParserOutput( $page->getTitle(), null, $options );
+		if ( method_exists( MediaWikiServices::class, 'getContentRenderer' ) ) {
+			// MW 1.38+
+			$output = MediaWikiServices::getInstance()->getContentRenderer()->getParserOutput( $page->getContent(), $page->getTitle(), null, $options );
+		} else {
+			$output = $page->getContent()->getParserOutput( $page->getTitle(), null, $options );
+		}
 		$this->assertEquals($output->getText( [ 'unwrap' => true ] ), "<p>TAGS: one, two, three.\n</p>", "Page 'Test template DumpTags after move template'" );
 
 		####### Create Page3 (transclude redirect StorageTag) #######
@@ -210,7 +220,14 @@ if ( $rows ) {
 		$res->free();
 
 		####### Test template DumpTags for redirect page #######
-		$wch = new WikitextContentHandler();
+		if ( method_exists( MediaWikiServices::class, 'getContentHandlerFactory' ) ) {
+			// MW 1.35+
+			$wch = MediaWikiServices::getInstance()
+				->getContentHandlerFactory()
+				->getContentHandler( CONTENT_MODEL_WIKITEXT );
+		} else {
+			$wch = ContentHandler::getForModelID( CONTENT_MODEL_WIKITEXT );
+		}
 		$text = $wch->makeRedirectContent( Title::newFromText( "Page3" ) );
 		$page = $this->createPage( "Redirect to Page3", $text, CONTENT_MODEL_WIKITEXT );
 		$page->insertRedirect();
@@ -218,7 +235,12 @@ if ( $rows ) {
 		$text = '{{DumpTags|Redirect to Page3}}';
 		$page = $this->createPage( "Test DumpTags for redirect page", $text, CONTENT_MODEL_WIKITEXT );
 
-		$output = $page->getContent()-> getParserOutput( $page->getTitle(), null, $options );
+		if ( method_exists( MediaWikiServices::class, 'getContentRenderer' ) ) {
+			// MW 1.38+
+			$output = MediaWikiServices::getInstance()->getContentRenderer()->getParserOutput( $page->getContent(), $page->getTitle(), null, $options );
+		} else {
+			$output = $page->getContent()->getParserOutput( $page->getTitle(), null, $options );
+		}
 		$this->assertEquals($output->getText( [ 'unwrap' => true ] ), "<p>TAGS: I use #redirect to template NewStorageTag.\n</p>" );
 
 		####### Delete Page1 #######

@@ -1,5 +1,6 @@
 <?php
 
+use MediaWiki\Revision\RenderedRevision;
 
 /**
  * PhpTags Storage MediaWiki Hooks.
@@ -41,13 +42,11 @@ class PhpTagsStorageHooks {
 	/**
 	 *
 	 * @param \Title $title
-	 * @param \Content $old
-	 * @param bool $recursive
-	 * @param \ParserOutput $parserOutput
+	 * @param RenderedRevision $renderedRevision
 	 * @param array $updates
 	 * @return boolean
 	 */
-	public static function onSecondaryDataUpdates( $title, $old, $recursive, $parserOutput, &$updates ) {
+	public static function onRevisionDataUpdates( $title, $renderedRevision, &$updates ) {
 		wfDebugLog( 'PhpTags Storage', __METHOD__ );
 //		echo __METHOD__ . '( ' . $title->getArticleID() . " )\n";
 		\PhpTagsObjects\Storage::onDataUpdates( $title->getArticleID(), $updates );
