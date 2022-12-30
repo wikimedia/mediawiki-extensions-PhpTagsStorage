@@ -4,6 +4,7 @@ use MediaWiki\MediaWikiServices;
 
 /**
  * @group Database
+ * @coversNothing
  */
 class StorageWikiPageTest extends MediaWikiLangTestCase {
 
