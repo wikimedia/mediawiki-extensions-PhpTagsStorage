@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eleassar"
+		]
+	},
+	"phptagsstorage-desc": "Zagotavlja lahek način za shranjevanje podatkov in poizvedovanje po njih za razširitev PhpTags"
+}
