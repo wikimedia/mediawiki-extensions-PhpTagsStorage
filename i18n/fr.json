@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"TomT0m"
+			"TomT0m",
+			"Verdy p"
 		]
 	},
-	"phptagsstorage-desc": "Fournit un stockage et une interrogation des données légère pour l'extension PhpTags"
+	"phptagsstorage-desc": "Fournit un moyen léger de stocker et interroger les données pour l’extension PhpTags"
 }
