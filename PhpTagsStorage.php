@@ -38,7 +38,6 @@ $wgHooks['LoadExtensionSchemaUpdates'][] = 'PhpTagsStorageHooks::onLoadExtension
 $wgHooks['RevisionDataUpdates'][] = 'PhpTagsStorageHooks::onRevisionDataUpdates';
 $wgHooks['WikiPageDeletionUpdates'][] = 'PhpTagsStorageHooks::onWikiPageDeletionUpdates';
 $wgHooks['UnitTestsList'][] = 'PhpTagsStorageHooks::onUnitTestsList';
-$wgHooks['ParserTestTables'][] = 'PhpTagsStorageHooks::onParserTestTables';
 
 // Preparing classes for autoloading
 $wgAutoloadClasses['PhpTagsStorageHooks'] = __DIR__ . '/PhpTagsStorage.hooks.php';

@@ -84,9 +84,4 @@ class PhpTagsStorageHooks {
 		return true;
 	}
 
-	public static function onParserTestTables( &$tables ) {
-		$tables[] = 'phptags_schemas';
-		$tables[] = 'phptags_page_templates';
-	}
-
 }
