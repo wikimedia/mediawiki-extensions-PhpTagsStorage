@@ -231,7 +231,6 @@ if ( $rows ) {
 		}
 		$text = $wch->makeRedirectContent( Title::newFromText( "Page3" ) );
 		$page = $this->createPage( "Redirect to Page3", $text, CONTENT_MODEL_WIKITEXT );
-		$page->insertRedirect();
 
 		$text = '{{DumpTags|Redirect to Page3}}';
 		$page = $this->createPage( "Test DumpTags for redirect page", $text, CONTENT_MODEL_WIKITEXT );
