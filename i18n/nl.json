@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"McDutchie"
+		]
+	},
+	"phptagsstorage-desc": "Een lichtgewicht voor het opslaan en opvragen van de gegevens voor de uitbreiding PhpTags"
+}
