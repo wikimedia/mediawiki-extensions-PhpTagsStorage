@@ -258,13 +258,20 @@ if ( $rows ) {
 		$res->free();
 
 		####### Undelete Page1 #######
-		$archive = new PageArchive( $page_1->getTitle() );
-
 		$comment = 'restore Page1 after test delete';
-		if ( method_exists( $archive, 'undeleteAsUser' ) ) {
-			$archive->undeleteAsUser( array(), $this->getTestSysop()->getUser(), $comment );
+		if ( version_compare( MW_VERSION, '1.38', '<' ) ) {
+			$archive = new PageArchive( $page_1->getTitle() );
+
+			if ( method_exists( $archive, 'undeleteAsUser' ) ) {
+				$archive->undeleteAsUser( array(), $this->getTestSysop()->getUser(), $comment );
+			} else {
+				$archive->undelete( array(), $comment );
+			}
 		} else {
-			$archive->undelete( array(), $comment );
+			$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle( $page_1->getTitle() );
+			$this->getServiceContainer()->getUndeletePageFactory()
+				->newUndeletePage( $page, $this->getTestSysop()->getAuthority() )
+				->undeleteUnsafe( $comment );
 		}
 
 		if ( method_exists( MediaWikiServices::class, 'getWikiPageFactory' ) ) {
