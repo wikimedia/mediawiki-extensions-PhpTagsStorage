@@ -21,7 +21,7 @@ class PageTemplatesUpdate extends \DataUpdate {
 	public function doUpdate() {
 		wfDebugLog( 'PhpTags Storage', __METHOD__ );
 
-		$db = wfGetDB( DB_MASTER );
+		$db = wfGetDB( DB_PRIMARY );
 		$templates = $this->templates;
 
 		if ( $templates ) {

@@ -25,7 +25,7 @@ class SchemaUpdate extends \DataUpdate {
 	public function doUpdate() {
 		wfDebugLog( 'PhpTags Storage', __METHOD__ );
 		$templateID = $this->templateID;
-		$db = wfGetDB( DB_MASTER );
+		$db = wfGetDB( DB_PRIMARY );
 
 		if ( $this->fDropTable ) {
 			try {
