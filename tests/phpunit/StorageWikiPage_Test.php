@@ -8,6 +8,8 @@ use MediaWiki\MediaWikiServices;
  */
 class StorageWikiPageTest extends MediaWikiLangTestCase {
 
+	private $pages_to_delete;
+
 	protected function setUp() : void {
 		parent::setUp();
 		$this->pages_to_delete = array();
