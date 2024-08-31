@@ -1,5 +1,6 @@
 <?php
 namespace PhpTagsStorage;
+use MediaWiki\MediaWikiServices;
 
 /**
  *
@@ -21,9 +22,14 @@ class PageDataUpdate extends \DataUpdate {
 	public function doUpdate() {
 		wfDebugLog( 'PhpTags Storage', __METHOD__ );
 
-		$db = wfGetDB( DB_MASTER );
+		if ( method_exists( MediaWikiServices::class, 'getConnectionProvider' ) ) {
+			// MW 1.42+
+			$dbw = MediaWikiServices::getInstance()->getConnectionProvider()->getPrimaryDatabase();
+		} else {
+			$dbw = wfGetDB( DB_PRIMARY );
+		}
 		wfDebugLog( 'PhpTags Storage', __METHOD__ . ' DELETE ' . $this->templateID . ' WHERE page_id=' . $this->pageID );
-		$db->delete( Schema::TABLE_PREFIX . $this->templateID, array('page_id'=>$this->pageID) );
+		$dbw->delete( Schema::TABLE_PREFIX . $this->templateID, array('page_id'=>$this->pageID) );
 		unset( \PhpTagsObjects\PageData::$cache[$this->pageID] );
 
 		if ( $this->rows === false ) {
@@ -37,7 +43,7 @@ class PageDataUpdate extends \DataUpdate {
 			$a[] = $value;
 		}
 		wfDebugLog( 'PhpTags Storage', __METHOD__ . ' INSERT ' . $this->templateID . ' VALUES ' . print_r( $a, true ) );
-		$db->insert( Schema::TABLE_PREFIX . $this->templateID, $a );
+		$dbw->insert( Schema::TABLE_PREFIX . $this->templateID, $a );
 	}
 
 }

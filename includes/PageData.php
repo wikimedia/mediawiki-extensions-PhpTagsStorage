@@ -49,14 +49,10 @@ class PageData extends \PhpTags\GenericObject {
 		if ( $title->isRedirect() ) {
 			if ( method_exists( MediaWikiServices::class, 'getWikiPageFactory' ) ) {
 				// MW 1.36+
-				$redirects = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $title )->getContent()->getRedirectChain();
+				$title = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $title )->getRedirectTarget();
 			} else {
-				$redirects = \WikiPage::factory( $title )->getContent()->getRedirectChain();
+				$title = \WikiPage::factory( $title )->getContent()->getRedirectTarget();
 			}
-			if ( !$redirects ) {
-				return false;
-			}
-			$title = array_pop( $redirects );
 		}
 		if ( $title && $title->exists() ) {
 			$user = \RequestContext::getMain()->getUser();
