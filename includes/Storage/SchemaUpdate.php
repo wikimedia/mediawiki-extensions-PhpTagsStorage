@@ -1,5 +1,6 @@
 <?php
 namespace PhpTagsStorage;
+use MediaWiki\MediaWikiServices;
 
 /**
  *
@@ -25,12 +26,17 @@ class SchemaUpdate extends \DataUpdate {
 	public function doUpdate() {
 		wfDebugLog( 'PhpTags Storage', __METHOD__ );
 		$templateID = $this->templateID;
-		$db = wfGetDB( DB_PRIMARY );
+		if ( method_exists( MediaWikiServices::class, 'getConnectionProvider' ) ) {
+			// MW 1.42+
+			$dbw = MediaWikiServices::getInstance()->getConnectionProvider()->getPrimaryDatabase();
+		} else {
+			$dbw = wfGetDB( DB_PRIMARY );
+		}
 
 		if ( $this->fDropTable ) {
 			try {
 				wfDebugLog( 'PhpTags Storage', __METHOD__ . " DROP TABLE $templateID");
-				$db->dropTable( Schema::TABLE_PREFIX . $templateID );
+				$dbw->dropTable( Schema::TABLE_PREFIX . $templateID );
 			} catch ( Exception $e ) {
 				throw new MWException( "Caught exception ($e) while trying to drop PhpTags Storage table. "
 				. "Please make sure that your database user account has the DROP permission." );
@@ -39,14 +45,14 @@ class SchemaUpdate extends \DataUpdate {
 
 		if ( $this->fields === false ) {
 			wfDebugLog( 'PhpTags Storage', __METHOD__ . " DELETE TABLE_SCHEMA $templateID");
-			$db->delete( Schema::TABLE_SCHEMA, array('template_id'=>$templateID) );
+			$dbw->delete( Schema::TABLE_SCHEMA, array('template_id'=>$templateID) );
 			$this->schemaLoadedRows[$templateID] = true;
 			$this->schemaTemplates[$templateID] = true;
 			return;
 		}
 
 		# create table for template's data
-		$tableName = $db->tableName( Schema::TABLE_PREFIX . $templateID );
+		$tableName = $dbw->tableName( Schema::TABLE_PREFIX . $templateID );
 		$fields = array(); // for update table Schema::TABLE_SCHEMA
 		$createSQL = "CREATE TABLE $tableName ( page_id int NOT NULL, row_id int NOT NULL";
 		foreach ( $this->fields as $f ) {
@@ -56,8 +62,8 @@ class SchemaUpdate extends \DataUpdate {
 		$createSQL .= ')';
 		try {
 			wfDebugLog( 'PhpTags Storage', __METHOD__ . " CREATE TABLE $templateID");
-			$db->query( $createSQL );
-			$db->query( "CREATE UNIQUE INDEX page_row_id ON $tableName ( page_id, row_id )" );
+			$dbw->query( $createSQL );
+			$dbw->query( "CREATE UNIQUE INDEX page_row_id ON $tableName ( page_id, row_id )" );
 		} catch ( Exception $e ) {
 			throw new MWException( "Caught exception ($e) while trying to create PhpTags Storage table. "
 				. "Please make sure that your database user account has the CREATE permission." );
@@ -66,7 +72,7 @@ class SchemaUpdate extends \DataUpdate {
 		# update table Schema::TABLE_SCHEMA
 		$schema = \FormatJson::encode( $fields );
 		wfDebugLog( 'PhpTags Storage', __METHOD__ . " REPLACE TABLE_SCHEMA $templateID");
-		$db->replace( Schema::TABLE_SCHEMA, array(array('template_id')), array('template_id'=>$templateID, 'table_schema'=>$schema) );
+		$dbw->replace( Schema::TABLE_SCHEMA, array(array('template_id')), array('template_id'=>$templateID, 'table_schema'=>$schema) );
 		$this->schemaTemplates[$templateID] = null;
 		$this->schemaLoadedRows[$templateID] = $schema;
 	}
