@@ -110,7 +110,12 @@ class PageData extends \PhpTags\GenericObject {
 		}
 
 		\PhpTagsStorage\Schema::loadSchema( $templates );
-		$db = wfGetDB( DB_REPLICA, 'PhpTags' );
+		if ( method_exists( MediaWikiServices::class, 'getConnectionProvider' ) ) {
+			// MW 1.42+
+			$db = MediaWikiServices::getInstance()->getConnectionProvider()->getReplicaDatabase( false, 'PhpTags' );
+		} else {
+			$db = wfGetDB( DB_REPLICA, 'PhpTags' );
+		}
 		foreach ( $templates as $t ) {
 			$fields = \PhpTagsStorage\Schema::getTemplateFields( $t );
 			$res = $db->select( \PhpTagsStorage\Schema::TABLE_PREFIX . $t, '*', array('page_id'=>$pageID) );
