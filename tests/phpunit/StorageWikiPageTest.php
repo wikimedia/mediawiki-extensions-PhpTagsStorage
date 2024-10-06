@@ -1,5 +1,4 @@
 <?php
-
 use MediaWiki\MediaWikiServices;
 
 /**
@@ -15,9 +14,14 @@ class StorageWikiPageTest extends MediaWikiLangTestCase {
 		$this->pages_to_delete = array();
 
 		MediaWikiServices::getInstance()->getLinkCache()->clear(); # avoid cached redirect status, etc
+
+		if ( PhpTags\Renderer::$needInitRuntime ) {
+			MediaWikiServices::getInstance()->getHookContainer()->run( 'PhpTagsRuntimeFirstInit' );
+			PhpTags\Hooks::loadData();
+			PhpTags\Runtime::$loopsLimit = 1000;
+			PhpTags\Renderer::$needInitRuntime = false;
+		}
 	}
-
-
 
 	protected function tearDown() : void {
 		$user = $this->getTestSysop()->getUser();
